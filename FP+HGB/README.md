@@ -14,7 +14,7 @@ This branch extends the baseline project by introducing **molecular fingerprints
 
 ### ⚙️ Model
 
-* Random Forest Regressor (parallelized with `n_jobs=-1`)
+* HistGradientBoostingRegressor
 
 ### 🎯 Goal
 
