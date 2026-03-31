@@ -1,32 +1,5 @@
-../data/raw/qm9_dataset
-File letti bene: 130680
-File con errore: 0
-CSV salvato in: ../data/processed/qm9_gap_dataset.csv
-Dataset caricato: 130680 righe
-Righe processate: 130680
-SMILES falliti: 0
-Feature dataset: 130680 righe
-Shape X: (130680, 11)
-Shape y: (130680,)
-Train shape: (104544, 11)
-Test shape : (26136, 11)
-Training completato.
 Valutazione modello:
-MAE : 0.0106
-RMSE: 0.0150
-R2  : 0.9003
-Metriche finali: {'MAE': 0.010627820024524065, 'RMSE': np.float64(0.014974153301516876), 'R2': 0.9003499651087656}
-Importanza delle feature:
-                  feature  importance
-3                    tpsa    0.222714
-5      num_aromatic_rings    0.174437
-2                    logp    0.167139
-10  num_valence_electrons    0.149057
-4               num_rings    0.104853
-0                  mol_wt    0.040098
-1            exact_mol_wt    0.039443
-7            num_h_donors    0.035890
-8         num_h_acceptors    0.023889
-9         num_heavy_atoms    0.023669
-6     num_rotatable_bonds    0.018813
-Pipeline completata!
+MAE : 0.0071
+RMSE: 0.0107
+R2  : 0.9491
+Metriche finali: {'MAE': 0.007143616943350242, 'RMSE': np.float64(0.010705354503014403), 'R2': 0.9490674979015722}

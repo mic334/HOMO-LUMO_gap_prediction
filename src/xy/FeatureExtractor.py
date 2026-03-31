@@ -1,6 +1,9 @@
 import pandas as pd
+import numpy as np
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Crippen, rdMolDescriptors
+from rdkit.Chem import AllChem
+from rdkit import DataStructs 
 
 
 class FeatureExtractor:
@@ -69,3 +72,12 @@ class FeatureExtractor:
         X = features_df[self.feature_names].copy()
         y = features_df["gap"].copy()
         return X, y
+    
+    def compute_morgan_fingerprints(self, molecules, radius=2, n_bits=2048):
+        fps = []
+        for mol in molecules:
+            fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
+            arr = np.zeros((n_bits,), dtype=int)
+            DataStructs.ConvertToNumpyArray(fp, arr)
+            fps.append(arr)
+        return np.array(fps)

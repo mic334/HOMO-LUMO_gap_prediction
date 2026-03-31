@@ -7,15 +7,16 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
 class ModelTrainer:
-    def __init__(self, test_size=0.2, random_state=42, n_estimators=200):
+    def __init__(self, test_size=0.2, random_state=42, n_estimators=100,n_jobs=-1):
         self.test_size = test_size
         self.random_state = random_state
         self.n_estimators = n_estimators
+        self.n_jobs = n_jobs
 
         self.model = RandomForestRegressor(
             n_estimators=self.n_estimators,
             random_state=self.random_state,
-            n_jobs=-1
+            n_jobs=self.n_jobs
         )
 
         self.X_train = None
@@ -75,3 +76,5 @@ class ModelTrainer:
         }).sort_values("importance", ascending=False)
 
         return importance_df
+    
+  
