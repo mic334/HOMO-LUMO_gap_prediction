@@ -2,7 +2,7 @@ import pandas as pd
 from parser.data_loader import QM9Parser
 from xy.FeatureExtractor import FeatureExtractor
 from modello.modello import  ModelTrainer
-from plot.model_visualizer import ModelVisualizer
+from plots.model_visualizer import ModelVisualizer
 
 def main():
     input_path = "../data/raw/qm9_dataset"

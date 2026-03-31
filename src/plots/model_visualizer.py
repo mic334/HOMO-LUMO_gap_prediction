@@ -13,6 +13,7 @@ class ModelVisualizer:
         plt.xlabel("Valori reali")
         plt.ylabel("Valori predetti")
         plt.title(title)
+        plt.savefig("../results/predicted_vs_actual.png", dpi=300, bbox_inches="tight")
         plt.show()
 
     def plot_errors(self, y_true, y_pred, bins=30, title="Error Distribution"):
@@ -23,6 +24,7 @@ class ModelVisualizer:
         plt.xlabel("Errore")
         plt.ylabel("Frequenza")
         plt.title(title)
+        plt.savefig("../results/error_distribution.png", dpi=300, bbox_inches="tight")  
         plt.show()
 
     def plot_feature_importance(self, importance_df: pd.DataFrame, top_n=10, title="Feature Importance"):
@@ -33,4 +35,5 @@ class ModelVisualizer:
         plt.xlabel("Importance")
         plt.ylabel("Feature")
         plt.title(title)
+        plt.savefig("../results/feature_importance.png", dpi=300, bbox_inches="tight")  
         plt.show()
