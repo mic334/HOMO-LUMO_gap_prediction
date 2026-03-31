@@ -1,0 +1,5 @@
+Valutazione modello:
+MAE : 0.0121
+RMSE: 0.0159
+R2  : 0.8872
+Metriche finali: {'MAE': 0.0120687478923736, 'RMSE': np.float64(0.015932080365450504), 'R2': 0.8871925240791378}
