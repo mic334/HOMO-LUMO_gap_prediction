@@ -43,6 +43,11 @@ def main():
 
     fp_feature_names = [f"fp_{i}" for i in range(X.shape[1])]
 
+    # Salvataggio modello e scaler
+    trainer.save_model(
+    model_path="../models/mlp_model.pkl",
+    scaler_path="../models/mlp_scaler.pkl"
+    )
     visualizer = ModelVisualizer()
 
     visualizer.plot_predictions(

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import joblib 
 
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
@@ -17,7 +18,9 @@ class ModelTrainer:
                  learning_rate_init=0.001, 
                  batch_size=256,early_stopping=True,
                  n_iter_no_change=10,
-                 alpha=0.0001):
+                 alpha=0.0001,
+                 model_path="models/model.pkl",
+                 scaler_path="models/scaler.pkl"):
         self.test_size = test_size
         self.random_state = random_state
         self.hidden_layer_sizes = hidden_layer_sizes
@@ -29,7 +32,8 @@ class ModelTrainer:
         self.early_stopping = early_stopping
         self.n_iter_no_change = n_iter_no_change
         self.alpha = alpha
-        from sklearn.neural_network import MLPRegressor
+        self.model_path = model_path
+        self.scaler_path = scaler_path
 
         self.model = MLPRegressor(
            hidden_layer_sizes=(128, 64),
@@ -101,5 +105,15 @@ class ModelTrainer:
         return self.evaluate()
 
 
-    
-  
+    def save_model(self, model_path=None, scaler_path=None):
+        if model_path is not None:
+            self.model_path = model_path
+        if scaler_path is not None:
+            self.scaler_path = scaler_path
+
+        joblib.dump(self.model, self.model_path)
+
+        if hasattr(self, "scaler"):
+            joblib.dump(self.scaler, self.scaler_path)
+
+        print(f"Modello salvato in: {self.model_path}")
