@@ -1,5 +1,8 @@
+from importlib.resources import path
 from pathlib import Path
 import pandas as pd
+from sympy import limit
+from rdkit import Chem
 
 
 class QM9Parser:
@@ -63,4 +66,32 @@ class QM9Parser:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(output_path, index=False)
         print(f"CSV salvato in: {output_path}")
+        
+
+    def extract_sdf_data(self,sdf_file,limit=10000):
+        
+        suppl = Chem.SDMolSupplier(sdf_file)
+        smiles = []
+
+        for mol in suppl:
+            if mol is None:
+                continue
+        
+            smi = Chem.MolToSmiles(mol, canonical=True)
+            smiles.append(smi)
+
+            if len(smiles) == limit:
+                break
+
+        return pd.DataFrame({"smiles": smiles})
+        
+        
+        
+        
+        
+        
+        c
+        
+        
+        
         

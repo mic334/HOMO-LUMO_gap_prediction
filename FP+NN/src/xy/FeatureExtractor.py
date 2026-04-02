@@ -67,6 +67,10 @@ class FeatureExtractor:
         print(f"SMILES falliti: {len(failed_smiles)}")
 
         return features_df, failed_smiles
+    
+    
+        
+    
 
     def get_xy(self, features_df: pd.DataFrame):
         X = features_df[self.feature_names].copy()
