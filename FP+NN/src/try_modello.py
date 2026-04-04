@@ -13,6 +13,7 @@ lg = RDLogger.logger()
 lg.setLevel(RDLogger.CRITICAL)
 
 
+
 def try_modello():
     input_path = "../data/PUB_raw"
     output_file = "../data/PUB_processed/compound_data.csv"
@@ -58,6 +59,8 @@ def try_modello():
     result_df = features_df[["molecule_id", "smiles", "gap"]]
     result_df = result_df.sort_values(by="gap", ascending=True)
     parser.save_csv(result_df, "../data/PUB_processed/compound_predictions.csv")
-
+    
+    
+    
 if __name__ == "__main__":
     try_modello()

@@ -1,0 +1,27 @@
+
+Program received signal SIGBUS: Access to an undefined portion of a memory object.
+
+Backtrace for this error:
+
+Program received signal SIGBUS: Access to an undefined portion of a memory object.
+
+Backtrace for this error:
+
+Program received signal SIGSEGV: Segmentation fault - invalid memory reference.
+
+Backtrace for this error:
+
+Program received signal SIGBUS: Access to an undefined portion of a memory object.
+
+Backtrace for this error:
+
+Could not print backtrace: libbacktrace could not find executable to open
+
+Could not print backtrace: libbacktrace could not find executable to open
+
+Could not print backtrace: libbacktrace could not find executable to open
+
+Could not print backtrace: libbacktrace could not find executable to open
+#0  0x10549a103
+#1  0x105499083
+#2  0x186d49763

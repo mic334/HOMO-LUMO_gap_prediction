@@ -1,0 +1,16 @@
+At line 852 of file ../src/optimizer.f90 (unit = 6, file = 'stdout')
+Fortran runtime error: Missing comma between descriptors
+(1x,"("f7.2"%)")
+               ^
+
+Error termination. Backtrace:
+#0  0x10317a103
+#1  0x10317acd7
+#2  0x10317b5a7
+#3  0x10328e30f
+#4  0x10329e66b
+#5  0x1024b28bb
+#6  0x1024b535f
+#7  0x102469833
+#8  0x1022a9d37
+#9  0x102520337

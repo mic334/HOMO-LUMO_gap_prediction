@@ -2,6 +2,8 @@ import os
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from httpx import head 
+from pathlib import Path
+
 
 class LetturaScrittura:
     def __init__(self, file_name):
@@ -155,30 +157,18 @@ $ORCA_HOME/bin/orca {input_name} > {base_name}.out
     
  
 
-from rdkit import Chem
-from rdkit.Chem import AllChem
-from pathlib import Path
-
-from pathlib import Path
-from rdkit import Chem
-from rdkit.Chem import AllChem
-
 def smiles_to_xyz(smiles, mol_id, output_dir):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         print(f"[ERRORE] SMILES non valido: {smiles}")
         return None
-
     mol = Chem.AddHs(mol)
-
     status = AllChem.EmbedMolecule(mol, AllChem.ETKDG())
     if status != 0:
         print(f"[ERRORE] Embed fallito per molecule_id={mol_id}")
         return None
-
     try:
         if AllChem.MMFFHasAllMoleculeParams(mol):
             AllChem.MMFFOptimizeMolecule(mol)
@@ -187,15 +177,12 @@ def smiles_to_xyz(smiles, mol_id, output_dir):
     except Exception as e:
         print(f"[ERRORE] Ottimizzazione fallita per molecule_id={mol_id}: {e}")
         return None
-
     conf = mol.GetConformer()
     filename = output_dir / f"{mol_id}.xyz"
-
     with open(filename, "w") as f:
         f.write(f"{mol.GetNumAtoms()}\n")
-        #f.write(f"id={mol_id} smiles={smiles}\n")
+        f.write(f"id={mol_id} smiles={smiles}\n")
         for atom in mol.GetAtoms():
             pos = conf.GetAtomPosition(atom.GetIdx())
             f.write(f"{atom.GetSymbol()} {pos.x:.6f} {pos.y:.6f} {pos.z:.6f}\n")
-
     return filename
