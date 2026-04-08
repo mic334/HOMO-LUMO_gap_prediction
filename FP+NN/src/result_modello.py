@@ -1,6 +1,6 @@
 import xy.FeatureExtractor as FeatureExtractor
 from plots.model_visualizer import ModelVisualizer
-import xtb_DFT.Lettura_Scrittura as Lettura_Scrittura
+from xtb_DFT.Lettura_Scrittura import LetturaScrittura
 from xtb_DFT.run_xtb import run_xtb
 import rdkit.Chem as Chem
 from rdkit.Chem import AllChem
@@ -11,6 +11,7 @@ import subprocess as sp
 from io import StringIO
 import os
 import time
+from glob import glob
 #import resource
 
 df = pd.read_csv("../data/PUB_processed/compound_predictions.csv")
@@ -104,3 +105,59 @@ visualizer.plot_errors(
     bins=10,
     title="Model vs XTB: Error Distribution"
 )
+
+path_xyz = "../data/PUB_processed/xyz_files/xtb/*/*opt.xyz"
+xyz_files = glob(path_xyz)
+print(xyz_files)
+
+programma = "gaussian"
+funzionale =  "B3LYP"
+basis_set = "6-31G(2df,p)"
+carica = "0"
+molteplicità = "1"
+nproc = "12"
+memoria = "12000"
+tempo = "12:00:00"
+
+for xyz_file in xyz_files:
+    xyz_path = Path(xyz_file)
+    # nome cartella padre, es. 6083
+    mol_id = xyz_path.parent.name
+    
+    # cartella dft dentro la cartella della molecola
+    dft_dir = xyz_path.parent / "dft"
+    dft_dir.mkdir(exist_ok=True)
+
+    lettura = LetturaScrittura(xyz_file)
+    print(lettura.nato)
+
+    head = lettura.testa(
+        funzionale, basis_set, carica, molteplicità,
+        nproc,
+        memoria[:2]
+    )
+
+    
+    com = lettura.scrivi_input(head, lettura.matrix, atomo1=1, atomo2=2, )
+    #print(com)
+    # cartella dft dentro la cartella della molecola
+    dft_dir = xyz_path.parent / "dft"
+    dft_dir.mkdir(exist_ok=True)
+
+    output_com = dft_dir / f"{mol_id}.com"
+    with open(output_com, "w") as f:
+        f.write(com)
+    print(f"Creato: {output_com}")
+    
+    slurm = lettura.genera_slurm(programma, output_com, nproc, tempo, memoria)
+    output_slurm = dft_dir / f"{mol_id}.slurm"
+
+
+    with open(output_slurm, "w") as fs:
+        fs.write(slurm)
+    
+    print(f"Creato: {output_slurm}")
+    
+    #slurm = lettura.genera_slurm(programma, com , nproc, tempo , memoria)
+    #print(slurm)
+    
