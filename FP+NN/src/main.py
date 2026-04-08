@@ -50,15 +50,20 @@ def main():
     )
     visualizer = ModelVisualizer()
 
+
+
     visualizer.plot_predictions(
         trainer.y_test,
         trainer.y_pred,
+        output_imm ="../figures/predicted_vs_actual.png",
         title="Neural Network: Predicted vs Actual"
     )
 
+    
     visualizer.plot_errors(
         trainer.y_test,
         trainer.y_pred,
+        output_imm = "../figures/error_distribution.png",
         bins=30,
         title="Neural Network: Error Distribution"
     )

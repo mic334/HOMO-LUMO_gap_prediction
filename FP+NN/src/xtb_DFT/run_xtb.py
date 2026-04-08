@@ -1,6 +1,6 @@
-import subprocess as sp
 import os
-import shutil 
+import shutil
+import subprocess as sp
 
 class run_xtb:
     def __init__(self, path_inp):
@@ -9,20 +9,27 @@ class run_xtb:
         os.makedirs(self.xtb_dir, exist_ok=True)
 
     def xtb(self, xyz_file):
-        os.makedirs(self.xtb_dir, exist_ok=True)
-
         xyz_name = os.path.basename(xyz_file)
         base_name = os.path.splitext(xyz_name)[0]
 
-        src = os.path.join(self.path, xyz_name)
-        dst = os.path.join(self.xtb_dir, xyz_name)
+        # 📁 cartella specifica per molecola
+        mol_dir = os.path.join(self.xtb_dir, base_name)
+        os.makedirs(mol_dir, exist_ok=True)
 
-        #evita di ricopiare se già esiste
+        src = os.path.join(self.path, xyz_name)
+        dst = os.path.join(mol_dir, xyz_name)
+
+        # evita ricopia se esiste
         if not os.path.exists(dst):
             shutil.copy2(src, dst)
 
-        out_file = os.path.join(self.xtb_dir, f"{base_name}.out")
-        err_file = os.path.join(self.xtb_dir, f"{base_name}.err")
+        out_file = os.path.join(mol_dir, f"{base_name}.out")
+        err_file = os.path.join(mol_dir, f"{base_name}.err")
+
+        # ambiente xtb
+        env = os.environ.copy()
+        env["OMP_NUM_THREADS"] = "1"
+        env["OMP_STACKSIZE"] = "4G"
 
         with open(out_file, "w") as fout, open(err_file, "w") as ferr:
             sp.run(
@@ -38,10 +45,9 @@ class run_xtb:
                     '--gfniter', '3000',
                     '--namespace', base_name
                 ],
-                cwd=self.xtb_dir,
+                cwd=mol_dir,   # 🔥 cambia qui
                 stdout=fout,
                 stderr=ferr,
-                text=True
+                text=True,
+                env=env
             )
-
-    
