@@ -1,27 +1,55 @@
-## 🧪 Fingerprint Benchmark Branch
+# FP+NN
 
-This branch extends the baseline project by introducing **molecular fingerprints (Morgan/ECFP)** as an alternative feature representation for predicting the HOMO-LUMO gap.
+This subproject explores **neural-network-based prediction** of the HOMO-LUMO gap using **Morgan fingerprint** features.
 
-### 🔍 What’s new
+## Purpose
 
-* Added **Morgan fingerprint extraction (2048 bits)**
-* Replaced descriptor-based features with **fingerprint-based features**
-* Enabled comparison between:
+`FP+NN` is the most flexible and most experimental track in the fingerprint benchmark branch.
 
-  * Descriptors (baseline)
-  * Fingerprints
-  * Hybrid (descriptors + fingerprints)
+Unlike the tree-based folders, this one appears to be used not only for benchmarking but also for a more operational workflow, with dedicated `models/` and `script/` directories.
 
-### ⚙️ Model
+## Model
 
-* MLPRegression
+This experiment uses:
 
-### 🎯 Goal
+- **Morgan fingerprints** as molecular representation
+- **MLP / neural-network-style regression** as the main modeling direction
 
-Evaluate whether molecular fingerprints improve predictive performance over classical descriptors.
+Neural models are included here to test whether a more flexible function approximator can learn useful patterns from fingerprint vectors beyond what tree ensembles capture.
 
-### 📊 Notes
+## Why this folder exists
 
-* Fingerprints provide better representation power but lower interpretability
-* Designed for experimentation and benchmarking
+This folder isolates the neural-network track from the more classical ensemble approaches.
 
+Compared with the other tracks:
+
+- it is less plug-and-play than `FP+RF`
+- it usually requires more tuning and preprocessing
+- it is the most likely place for extended experimentation and workflow scripts
+
+## Folder Contents
+
+This subproject includes:
+
+- `src/` for core code
+- `models/` for saved or reusable model artifacts
+- `script/` for shell workflows and execution utilities
+- `data/`, `figures/`, `notebooks/`, and `results/`
+- `requirements.txt` for dependencies
+
+## Practical Role
+
+This is the most “research-like” folder in the branch.
+
+It is the right place for:
+
+- trying training variants
+- saving model artifacts
+- running repeatable scripts
+- testing prediction-oriented workflows
+
+## Notes
+
+- neural models can be more expressive, but they are usually less stable than tree-based baselines
+- this folder appears broader than a simple benchmark, so it may evolve into a more applied experiment area
+- model behavior should always be compared back to `FP+RF` and `FP+HGB`

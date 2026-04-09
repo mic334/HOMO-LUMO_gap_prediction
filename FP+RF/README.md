@@ -1,27 +1,57 @@
-## 🧪 Fingerprint Benchmark Branch
+# FP+RF
 
-This branch extends the baseline project by introducing **molecular fingerprints (Morgan/ECFP)** as an alternative feature representation for predicting the HOMO-LUMO gap.
+This subproject benchmarks **Random Forest regression** on **Morgan fingerprint** features for HOMO-LUMO gap prediction.
 
-### 🔍 What’s new
+## Purpose
 
-* Added **Morgan fingerprint extraction (2048 bits)**
-* Replaced descriptor-based features with **fingerprint-based features**
-* Enabled comparison between:
+`FP+RF` is the most natural tree-based baseline in the fingerprint branch.
 
-  * Descriptors (baseline)
-  * Fingerprints
-  * Hybrid (descriptors + fingerprints)
+It is meant to answer a simple question:
 
-### ⚙️ Model
+**how far can a robust, low-maintenance ensemble model go when molecular descriptors are replaced by fingerprint vectors?**
 
-* Random Forest Regressor (parallelized with `n_jobs=-1`)
+## Model
 
-### 🎯 Goal
+This experiment uses:
 
-Evaluate whether molecular fingerprints improve predictive performance over classical descriptors.
+- **Morgan fingerprints** as molecular representation
+- **Random Forest Regressor** as prediction model
 
-### 📊 Notes
+Random Forest is a good benchmark here because it is:
 
-* Fingerprints provide better representation power but lower interpretability
-* Designed for experimentation and benchmarking
+- stable
+- easy to train
+- strong on tabular representations
+- less sensitive than neural models to tuning
 
+## Why this folder exists
+
+This folder isolates the fingerprint + Random Forest setup from the other experiments in the branch.
+
+Compared with the other tracks:
+
+- it is usually easier to train than `FP+NN`
+- it is more conservative than `FP+HGB`
+- it works well as a reference baseline for fingerprint-based modeling
+
+## Folder Contents
+
+This subproject includes:
+
+- `src/` for the main code pipeline
+- `data/` for input or processed artifacts
+- `notebooks/` for exploratory work
+- `figures/` and `results/` for outputs
+- `requirements.txt` for local dependencies
+
+## Interpretation
+
+This is the “strong baseline” experiment of the fingerprint branch.
+
+If a more complex model does not clearly outperform this setup, then the added complexity may not be worth it.
+
+## Notes
+
+- fingerprint features improve structural representation but reduce interpretability
+- this folder is intended for benchmarking, not as the final polished pipeline
+- detailed metrics and outputs should be documented in `results/` or notebooks
