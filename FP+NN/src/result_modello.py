@@ -16,7 +16,7 @@ from glob import glob
 
 df = pd.read_csv("../data/PUB_processed/compound_predictions.csv")
 df.info()
-# '''
+'''
 df_new = pd.concat([
     df[["molecule_id", "smiles", "gap"]].head(5),
     df[["molecule_id", "smiles", "gap"]].tail(5)
@@ -60,7 +60,7 @@ for xyz_file in xyz_files:
 
 t_end = time.time()
 print(f"Tempo totale: {t_end - t_start:.2f} s")
-#'''
+'''
 result = sp.run(
     ["bash", "../script/estrai_HOMO_LUMO_xtb.sh"],
     capture_output=True,
@@ -180,10 +180,12 @@ df_plot = df[["molecule_id", "gap"]].rename(
 ).copy()
 
 df_plot = df_plot.merge(
-    df_SCF[["idmol", "gap"]].rename(columns={"gap": "gap_real"}),
+    df_SCF[["idmol", "gap","status"]].rename(columns={"gap": "gap_real"}),
     on="idmol",
     how="inner"
 ).sort_values("idmol").reset_index(drop=True)
+
+df_plot = df_plot[df_plot["status"] == "complete"].copy()
 
 visualizer = ModelVisualizer()
 
