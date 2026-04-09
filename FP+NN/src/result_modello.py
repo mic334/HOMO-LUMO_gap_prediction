@@ -16,7 +16,7 @@ from glob import glob
 
 df = pd.read_csv("../data/PUB_processed/compound_predictions.csv")
 df.info()
-'''
+# '''
 df_new = pd.concat([
     df[["molecule_id", "smiles", "gap"]].head(5),
     df[["molecule_id", "smiles", "gap"]].tail(5)
@@ -60,7 +60,7 @@ for xyz_file in xyz_files:
 
 t_end = time.time()
 print(f"Tempo totale: {t_end - t_start:.2f} s")
-'''
+#'''
 result = sp.run(
     ["bash", "../script/estrai_HOMO_LUMO_xtb.sh"],
     capture_output=True,
@@ -94,7 +94,7 @@ visualizer = ModelVisualizer()
 visualizer.plot_predictions(
     df_plot["gap_real"].to_numpy(),
     df_plot["gap_pred"].to_numpy(),
-    output_imm="../figures/pred_vs_calcc" ,
+    output_imm="../figures/pred_vs_calc_xtb.png" ,
     title="Model vs XTB: Predicted vs calc"
 )
 
@@ -161,3 +161,43 @@ for xyz_file in xyz_files:
     #slurm = lettura.genera_slurm(programma, com , nproc, tempo , memoria)
     #print(slurm)
     
+    
+    scf_extract = sp.run(
+    ["bash", "../script/HOMO_LUMO.sh"],
+    capture_output=True,
+    text=True,
+    check=True
+)
+
+df_SCF = pd.read_csv(StringIO(scf_extract.stdout))
+print(df_SCF.head(5))
+
+df_SCF = df_SCF.rename(columns={"id": "idmol"})
+df_SCF["gap"] = df_SCF["lumo"] - df_SCF["homo"]
+print(df_SCF.head())
+df_plot = df[["molecule_id", "gap"]].rename(
+    columns={"molecule_id": "idmol", "gap": "gap_pred"}
+).copy()
+
+df_plot = df_plot.merge(
+    df_SCF[["idmol", "gap"]].rename(columns={"gap": "gap_real"}),
+    on="idmol",
+    how="inner"
+).sort_values("idmol").reset_index(drop=True)
+
+visualizer = ModelVisualizer()
+
+visualizer.plot_predictions(
+    df_plot["gap_real"].to_numpy(),
+    df_plot["gap_pred"].to_numpy(),
+    output_imm="../figures/pred_vs_calc_DFT.png",
+    title="Model vs DFT: Predicted vs Calc"
+)
+
+visualizer.plot_errors(
+    df_plot["gap_real"].to_numpy(),
+    df_plot["gap_pred"].to_numpy(),
+    output_imm="../figures/error_distribution_DFT.png",
+    bins=10,
+    title="Model vs DFT: Error Distribution"
+)
