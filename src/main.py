@@ -1,10 +1,8 @@
 import pandas as pd
-from parser.data_loader import QM9Parser
-from xy.FeatureExtractor import FeatureExtractor
-from modello.modello import  ModelTrainer
+from parser.data_loader import QM9Parser 
 from plots.model_visualizer import ModelVisualizer
 from graph.graf import Graph_tools
-from modello.modello import GNNModel, GNNTrainer
+from modello.modello_GNN import GNNModel, GNNTrainer
 from torch_geometric.loader import DataLoader
 
 def main():
