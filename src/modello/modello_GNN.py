@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
 import time
+import os
 
 #per GNN
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import Linear
 from torch_geometric.nn import GCNConv, global_mean_pool, global_add_pool
@@ -44,12 +46,6 @@ class GNNModel(torch.nn.Module):
         x = self.lin2(x)
 
         return x
-    
-
-
-import torch
-import torch.nn as nn
-
 
 class GNNTrainer:
     def __init__(self, model, train_loader, test_loader, lr=0.001, device=None):
@@ -216,3 +212,15 @@ class GNNTrainer:
         print(f"R2  : {r2:.4f}")
 
         return self.metrics
+    
+    def save_model_gnn(self,model,model_name,model_path=None):
+        if model_path is None:
+            model_path = "."
+
+        os.makedirs(model_path, exist_ok=True)
+        percorso_file = f"{model_path}/{model_name}.pth"
+
+        torch.save(model, percorso_file)
+        print(f"Modello salvato in: {percorso_file}")
+
+        return

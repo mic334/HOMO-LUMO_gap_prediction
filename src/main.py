@@ -52,6 +52,11 @@ def main():
     print(trainer.device)
     trainer.run(epochs=50)
     
+    #save modello
+    path_modello = "../models"
+    model_name = "GNN.pth"
+    trainer.save_model_gnn(model,model_name,path_modello)
+    
     visualizer = ModelVisualizer()
     
     visualizer.plot_losses(trainer.train_losses, trainer.test_losses)
