@@ -37,3 +37,28 @@ class ModelVisualizer:
         plt.title(title)
         plt.savefig("../results/feature_importance.png", dpi=300, bbox_inches="tight")  
         plt.show()
+        
+    def plot_losses(self, train_losses, test_losses, title="Training and Test Loss"):
+        epochs = range(1, len(train_losses) + 1)
+
+        plt.figure(figsize=(7, 5))
+        plt.plot(epochs, train_losses, label="Train Loss")
+        plt.plot(epochs, test_losses, label="Test Loss")
+        plt.xlabel("Epoche")
+        plt.ylabel("Loss")
+        plt.title(title)
+        plt.legend()
+        plt.savefig("../results/loss_curve.png", dpi=300, bbox_inches="tight")
+        plt.show()
+
+
+    def plot_epoch_times(self, epoch_time, title="Time per Epoch"):
+        epochs = range(1, len(epoch_time) + 1)
+
+        plt.figure(figsize=(7, 5))
+        plt.plot(epochs, epoch_time)
+        plt.xlabel("Epoche")
+        plt.ylabel("Tempo (s)")
+        plt.title(title)
+        plt.savefig("../results/epoch_times.png", dpi=300, bbox_inches="tight")
+        plt.show()
