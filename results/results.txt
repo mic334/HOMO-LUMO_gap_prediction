@@ -1,0 +1,87 @@
+../data/raw/qm9_dataset
+File letti bene: 130680
+File con errore: 0
+CSV salvato in: ../data/processed/qm9_gap_dataset.csv
+Dataset caricato: 130680 righe
+<class 'pandas.DataFrame'>
+RangeIndex: 130680 entries, 0 to 130679
+Data columns (total 7 columns):
+ #   Column                      Non-Null Count   Dtype  
+---  ------                      --------------   -----  
+ 0   molecule_id                 130680 non-null  int64  
+ 1   smiles                      130680 non-null  str    
+ 2   norm_dipole_moment          130680 non-null  float64
+ 3   norm_static_polarizability  130680 non-null  float64
+ 4   homo                        130680 non-null  float64
+ 5   lumo                        130680 non-null  float64
+ 6   gap                         130680 non-null  float64
+dtypes: float64(5), int64(1), str(1)
+memory usage: 8.9 MB
+CC#N
+Data(x=[3, 8], edge_index=[2, 4], y=[1])
+Data(x=[3, 8], edge_index=[2, 4], y=[1])
+torch.Size([3, 8])
+torch.Size([2, 4])
+tensor([0.3640])
+Train size: 104544
+Test size : 26136
+cpu
+Epoch 1/50 | Train Loss: 0.0021 | Test Loss: 0.0006 |Time: 5.63 s
+Epoch 2/50 | Train Loss: 0.0005 | Test Loss: 0.0005 |Time: 5.78 s
+Epoch 3/50 | Train Loss: 0.0004 | Test Loss: 0.0003 |Time: 5.66 s
+Epoch 4/50 | Train Loss: 0.0004 | Test Loss: 0.0003 |Time: 5.50 s
+Epoch 5/50 | Train Loss: 0.0003 | Test Loss: 0.0004 |Time: 5.49 s
+Epoch 6/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.50 s
+Epoch 7/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.50 s
+Epoch 8/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.49 s
+Epoch 9/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.51 s
+Epoch 10/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.48 s
+Epoch 11/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.49 s
+Epoch 12/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.76 s
+Epoch 13/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 6.57 s
+Epoch 14/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.94 s
+Epoch 15/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.90 s
+Epoch 16/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.66 s
+Epoch 17/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.77 s
+Epoch 18/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.64 s
+Epoch 19/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.62 s
+Epoch 20/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.82 s
+Epoch 21/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.85 s
+Epoch 22/50 | Train Loss: 0.0002 | Test Loss: 0.0002 |Time: 5.69 s
+Epoch 23/50 | Train Loss: 0.0002 | Test Loss: 0.0001 |Time: 5.88 s
+Epoch 24/50 | Train Loss: 0.0002 | Test Loss: 0.0001 |Time: 5.56 s
+Epoch 25/50 | Train Loss: 0.0001 | Test Loss: 0.0002 |Time: 5.55 s
+Epoch 26/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.58 s
+Epoch 27/50 | Train Loss: 0.0002 | Test Loss: 0.0001 |Time: 5.57 s
+Epoch 28/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.58 s
+Epoch 29/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.71 s
+Epoch 30/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.57 s
+Epoch 31/50 | Train Loss: 0.0001 | Test Loss: 0.0002 |Time: 5.56 s
+Epoch 32/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.58 s
+Epoch 33/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.56 s
+Epoch 34/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.59 s
+Epoch 35/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.52 s
+Epoch 36/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.68 s
+Epoch 37/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.56 s
+Epoch 38/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.56 s
+Epoch 39/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.55 s
+Epoch 40/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.76 s
+Epoch 41/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.61 s
+Epoch 42/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.58 s
+Epoch 43/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.56 s
+Epoch 44/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.57 s
+Epoch 45/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.67 s
+Epoch 46/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.70 s
+Epoch 47/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.83 s
+Epoch 48/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.78 s
+Epoch 49/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.83 s
+Epoch 50/50 | Train Loss: 0.0001 | Test Loss: 0.0001 |Time: 5.68 s
+Training completato in 282.96 secondi
+Valutazione modello:
+MAE : 0.0091
+RMSE: 0.0120
+R2  : 0.9365
+y_true mean/std: 0.2521133 0.047435507
+y_pred mean/std: 0.24957852 0.049280617
+y_true min/max: 0.042 0.5048
+y_pred min/max: 0.02869749 0.45243213

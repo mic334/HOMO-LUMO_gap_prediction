@@ -47,12 +47,12 @@ def main():
     test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
     #model creation obj 
     
-    model = GNNModel(in_channels=4,hidden_channels=32)
+    model = GNNModel(in_channels=8,hidden_channels=128)
     
     #ogetto trainer in per poi usare run(funzione che fa il training )
     trainer = GNNTrainer(model, train_loader, test_loader, lr=0.001)
     print(trainer.device)
-    trainer.run(epochs=20)
+    trainer.run(epochs=50)
     
     visualizer = ModelVisualizer()
     
@@ -67,58 +67,10 @@ def main():
 
     trainer.evaluate_GNN()
 
-'''
-
-    # obj 
-    extractor = FeatureExtractor()
-    
-    features_df, failed = extractor.transform(df)
-
-    print(f"Feature dataset: {len(features_df)} righe")
-
-    # STEP 4 — X e y
-    X, y = extractor.get_xy(features_df)
-
-    print("Shape X:", X.shape)
-    print("Shape y:", y.shape)
-
-    #obj
-    trainer = ModelTrainer()
-    #train pipeline (X,y) -> split, train, predict, evaluate
-    metrics = trainer.train_pipeline(X, y)
-    print("Metriche finali:", metrics)
-    #get feature importance (extractor.feature_names ) -> print importance  
-    importance_df = trainer.get_feature_importance(extractor.feature_names)
-    print("Importanza delle feature:") 
-    print(importance_df)
-   
-    visualizer = ModelVisualizer()
-
-    visualizer.plot_predictions(
-        trainer.y_test,
-        trainer.y_pred,
-        title="Random Forest: Predicted vs Actual"
-    )
-
-    visualizer.plot_errors(
-        trainer.y_test,
-        trainer.y_pred,
-        bins=30,
-        title="Random Forest: Error Distribution"
-    )
-
-    importance_df = trainer.get_feature_importance(X.columns)
-
-    visualizer.plot_feature_importance(
-        importance_df,
-        top_n=10,
-        title="Random Forest: Top 10 Feature Importances"
-    )
-    
-    
-    print("Pipeline completata!")
-
-'''
+    print("y_true mean/std:", y_true.mean(), y_true.std())
+    print("y_pred mean/std:", y_pred.mean(), y_pred.std())
+    print("y_true min/max:", y_true.min(), y_true.max())
+    print("y_pred min/max:", y_pred.min(), y_pred.max())
 
 if __name__ == "__main__":
     main()

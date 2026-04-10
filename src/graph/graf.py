@@ -13,10 +13,14 @@ class Graph_tools :
     
     def atom_features(self, atom):
         return [
-            atom.GetAtomicNum(),
-            atom.GetDegree(),
-            atom.GetFormalCharge(),
-            int(atom.GetIsAromatic()),
+        atom.GetAtomicNum(),              # numero atomico
+        atom.GetDegree(),                 # numero di vicini
+        atom.GetFormalCharge(),           # carica formale
+        int(atom.GetIsAromatic()),        # aromatico o no
+        atom.GetTotalNumHs(),             # numero totale di H
+        atom.GetValence(Chem.ValenceType.IMPLICIT),        # valenza implicita
+        atom.GetValence(Chem.ValenceType.EXPLICIT),        # valenza implicita
+        int(atom.IsInRing())              # atomo in anello
         ]
     def smiles_to_graph(self,smiles,target):
         mol = Chem.MolFromSmiles(smiles)    
