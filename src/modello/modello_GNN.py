@@ -10,6 +10,8 @@ import torch.nn.functional as F
 from torch.nn import Linear
 from torch_geometric.nn import GCNConv, global_mean_pool, global_add_pool
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from torch_geometric.loader import DataLoader
+
 
   
 class GNNModel(torch.nn.Module):
@@ -46,7 +48,33 @@ class GNNModel(torch.nn.Module):
         x = self.lin2(x)
 
         return x
+    
+    @staticmethod
+    def model_load( model_path, device):
+        device = torch.device(device)
+        model = torch.load(model_path, map_location=device,weights_only=False)
+        model.to(device)
+        model.eval()
+        print("modello caricato")
+        return model
+        
+    @staticmethod
+    def predict_new_gaps(model, datas, device="cpu", batch_size=32):
+        device = torch.device(device)
+        pred_loader = DataLoader(datas, batch_size=batch_size, shuffle=False)
 
+        preds = []
+        model.eval()
+
+        with torch.no_grad():
+            for batch in pred_loader:
+                batch = batch.to(device)
+                out = model(batch.x, batch.edge_index, batch.batch)
+                preds.extend(out.view(-1).cpu().tolist())
+
+        return preds
+        
+    
 class GNNTrainer:
     def __init__(self, model, train_loader, test_loader, lr=0.001, device=None):
         """
@@ -222,5 +250,5 @@ class GNNTrainer:
 
         torch.save(model, percorso_file)
         print(f"Modello salvato in: {percorso_file}")
-
+        
         return

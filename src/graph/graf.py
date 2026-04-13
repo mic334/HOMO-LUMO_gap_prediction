@@ -22,7 +22,7 @@ class Graph_tools :
         atom.GetValence(Chem.ValenceType.EXPLICIT),        # valenza implicita
         int(atom.IsInRing())              # atomo in anello
         ]
-    def smiles_to_graph(self,smiles,target):
+    def smiles_to_graph(self,smiles,target=None):
         mol = Chem.MolFromSmiles(smiles)    
         if mol is None:
             raise ValueError(f"Invalid SMILES: {smiles}")
@@ -42,8 +42,12 @@ class Graph_tools :
         else:
             edge_index = torch.tensor(edge_index, dtype=torch.long).t().contiguous()
 
-        y = torch.tensor([target], dtype=torch.float)
-
+        if target is None:
+            #y = torch.empty((1,), dtype=torch.float)
+            y = torch.tensor([float("nan")], dtype=torch.float)
+        else:
+            y = torch.tensor([target], dtype=torch.float)
+        
         return Data(x=x, edge_index=edge_index, y=y)
     
     def split_data_GNN(self, datas ,test_size=0.2, random_state=42):
