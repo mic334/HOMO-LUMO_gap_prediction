@@ -48,6 +48,13 @@ It is the right place for:
 - running repeatable scripts
 - testing prediction-oriented workflows
 
+## Data PUB
+
+Link: https://ftp.ncbi.nlm.nih.gov/pubchem/Compound/CURRENT-Full/SDF/
+name data = Compound_000000001_000500000.sdf.gz
+Dwnload and copy in /data/PUB_raw or modified the input_path and input_file
+
+
 ## Notes
 
 - neural models can be more expressive, but they are usually less stable than tree-based baselines
