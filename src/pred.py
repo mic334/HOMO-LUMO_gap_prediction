@@ -59,8 +59,8 @@ def try_modello():
     df["pred_gap"] = preds
 
     # Stampo un'anteprima del risultato
-    print(df[["smiles", "pred_gap"]].head(10))
     df = df.sort_values(by="pred_gap", ascending=True)
+    print(df[["smiles", "pred_gap"]].head(10))
     parser.save_csv(df,"../data/PUB_processed/compound_predictions.csv")
 
 if __name__ == "__main__":

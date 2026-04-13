@@ -46,6 +46,7 @@ class GNNModel(torch.nn.Module):
         x = self.lin1(x)
         x = F.relu(x)
         x = self.lin2(x)
+        x = F.softplus(x)
 
         return x
     

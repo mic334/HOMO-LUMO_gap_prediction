@@ -54,7 +54,7 @@ def main():
     
     #save modello
     path_modello = "../models"
-    model_name = "GNN.pth"
+    model_name = "models"
     trainer.save_model_gnn(model,model_name,path_modello)
     
     visualizer = ModelVisualizer()
