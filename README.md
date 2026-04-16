@@ -1,81 +1,90 @@
 # HOMO-LUMO Gap Prediction
 
-A machine learning project for predicting the **HOMO-LUMO gap** of molecules using **SMILES-derived molecular descriptors**, **RDKit**, and **scikit-learn**.
+Machine learning project for predicting the HOMO-LUMO gap of molecules using graph neural networks (GNNs) built from SMILES representations.
 
 ---
 
 ## Overview
 
-The HOMO-LUMO gap is an important molecular property in computational chemistry, often related to:
+The HOMO-LUMO gap is an important molecular property in computational chemistry and is often related to:
 
 - electronic structure
 - chemical reactivity
 - optical behavior
 - molecular stability
 
-This repository implements a complete end-to-end workflow starting from raw **QM9** molecular files and ending with model training, evaluation, and visualization.
+This branch focuses on a graph-based pipeline where each molecule is converted from SMILES to a molecular graph and processed with a Graph Neural Network for regression.
 
-The **`main` branch** contains the current stable baseline based on **RDKit molecular descriptors**.
-
-A separate development branch is used for more experimental work, including **fingerprint-based features and model extensions**.
+In addition to training on QM9-derived data, the project also includes scripts for running inference on external molecular datasets and comparing model predictions with xTB/DFT calculations.
 
 ---
 
-## Branches
+## Current Branch
 
-### `main`
-Stable baseline pipeline based on:
+This branch (`graph_nn_benchmark`) contains the current experimental benchmark based on:
 
 - QM9 raw data parsing
-- SMILES processing
-- RDKit descriptor extraction
-- regression model training
-- evaluation and visualization
-
-### experimental branch
-A separate branch is used for experiments beyond the baseline, such as:
-
-- molecular fingerprints
-- alternative feature spaces
-- additional models and comparisons
-
-This keeps the `main` branch cleaner and focused on the core project pipeline.
+- SMILES extraction
+- graph construction from molecules
+- GNN training with PyTorch Geometric
+- model evaluation and visualization
+- prediction on external compounds
+- comparison against xTB / DFT reference values
 
 ---
 
 ## Current Pipeline
 
-The current `main` branch performs the following steps:
+The current workflow is:
 
 1. parse raw QM9 `.xyz` files
 2. extract molecular information and target values
-3. save a processed dataset as CSV
-4. compute RDKit molecular descriptors from SMILES
-5. train a regression model
-6. evaluate model performance
-7. generate result plots
+3. save the processed dataset as CSV
+4. convert each SMILES string into a graph
+5. build PyTorch Geometric `Data` objects
+6. split the dataset into training and test sets
+7. train a GNN regression model
+8. save the trained model
+9. generate evaluation plots
+10. run prediction on external molecules
+11. compare predictions with xTB / DFT results
 
 ---
 
-## Features
+## Model
 
-At the moment, the `main` branch uses **molecular descriptors**, not fingerprints yet.
+The current model is a graph neural network implemented with PyTorch Geometric.
 
-The extracted features include:
+Main characteristics:
 
-- molecular weight
-- exact molecular weight
-- LogP
-- TPSA
-- number of rings
-- number of aromatic rings
-- number of rotatable bonds
-- number of H-bond donors
-- number of H-bond acceptors
-- number of heavy atoms
-- number of valence electrons
+- node features extracted from RDKit atoms
+- graph convolution layers (`GCNConv`)
+- global pooling over node embeddings
+- final regression head for HOMO-LUMO gap prediction
 
-These features provide a compact and interpretable representation of each molecule.
+The current node-level features include:
+
+- atomic number
+- atom degree
+- formal charge
+- aromaticity
+- total number of hydrogens
+- implicit valence
+- explicit valence
+- ring membership
+
+---
+
+## Dataset
+
+The training pipeline uses QM9 molecular files in `.xyz` format.
+
+**Dataset source:  https://ftp.ncbi.nlm.nih.gov/pubchem/Compound/CURRENT-Full/SDF/ name data = Compound_000000001_000500000.sdf.gz **
+
+Processed files are saved inside:
+
+- `data/processed/`
+- `data/PUB_processed/` for external prediction datasets
 
 ---
 
@@ -85,18 +94,29 @@ These features provide a compact and interpretable representation of each molecu
 HOMO-LUMO_gap_prediction/
 ├── data/
 │   ├── raw/
-│   └── processed/
+│   ├── processed/
+│   └── PUB_processed/
+├── figures/
+├── models/
+│   └── models.pth
 ├── notebooks/
 ├── results/
+├── script/
+│   ├── HOMO_LUMO.sh
+│   ├── estrai_HOMO_LUMO_xtb.sh
+│   └── sottometti.sh
 ├── src/
 │   ├── main.py
+│   ├── pred.py
+│   ├── result_modello.py
+│   ├── graph/
+│   │   └── graf.py
+│   ├── modello/
+│   │   └── modello_GNN.py
 │   ├── parser/
 │   │   └── data_loader.py
-│   ├── modello/
-│   │   └── modello.py
 │   ├── plots/
 │   │   └── model_visualizer.py
-│   └── xy/
-│       └── FeatureExtractor.py
+│   └── xtb_DFT/
 ├── requirements.txt
 └── README.md
