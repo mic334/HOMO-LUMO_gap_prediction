@@ -4,6 +4,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 class MathBase:
     def mae(self, y_true, y_pred):
+    
         return mean_absolute_error(y_true, y_pred)
 
     def rmse(self, y_true, y_pred):
@@ -17,4 +18,9 @@ class MathBase:
         mae = self.mae(y_true, y_pred)
         rmse = self.rmse(y_true, y_pred)
         r2 = self.r2(y_true, y_pred)
+        print("inizio metriche")
+        print(f"mae : {mae}")
+        print(f"rmese : {rmse}")
+        print(f"R quadro : {r2}")
+        print("fien metriche")
         return mae, rmse, r2
