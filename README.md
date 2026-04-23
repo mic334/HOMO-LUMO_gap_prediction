@@ -120,3 +120,6 @@ HOMO-LUMO_gap_prediction/
 │   └── xtb_DFT/
 ├── requirements.txt
 └── README.md
+
+# alchemy dataset download
+https://alchemy.tencent.com

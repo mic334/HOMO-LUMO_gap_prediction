@@ -1,9 +1,11 @@
+from pyclbr import Class
 import pandas as pd
 from importlib.resources import path
 from pathlib import Path
 import pandas as pd
 from sympy import limit
 from rdkit import Chem
+
 
 
 
@@ -86,3 +88,53 @@ class QM9Parser:
                 break
 
         return pd.DataFrame({"smiles": smiles})
+    
+from pathlib import Path
+from rdkit import Chem
+
+from pathlib import Path
+from rdkit import Chem
+
+
+class  Alchemy_parser:
+    def __init__(self):
+        pass
+
+
+    def sdf_file_to_id_smiles(self, sdf_path):
+        """
+        Input:
+            sdf_path: path del file .sdf
+
+        Output:
+            (molecule_id, smiles)
+
+        Se non riesce a leggere il file, restituisce:
+            (molecule_id, None)
+        """
+        sdf_path = Path(sdf_path)
+        molecule_id = sdf_path.stem
+
+        try:
+            suppl = Chem.SDMolSupplier(str(sdf_path), removeHs=True)
+            if len(suppl) == 0:
+                return molecule_id, None
+
+            mol = suppl[0]
+            if mol is None:
+                return molecule_id, None
+
+            smiles = Chem.MolToSmiles(mol, isomericSmiles=True)
+            return molecule_id, smiles
+
+        except Exception:
+            return molecule_id, None
+        
+    
+
+    def in_join(self, first_data_frame, second_dataframe, col_id="gdb_idx", col_gap="gap\r\n(Ha, LUMO-HOMO)"):
+        return first_data_frame.merge(
+            second_dataframe[[col_id, col_gap]].rename(columns={col_gap: "gap"}),
+            on=col_id,
+            how="inner"
+        )
