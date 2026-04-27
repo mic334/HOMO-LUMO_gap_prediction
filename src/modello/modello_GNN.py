@@ -15,8 +15,10 @@ from torch_geometric.loader import DataLoader
 
   
 class GNNModel(torch.nn.Module):
-    def __init__(self, in_channels, hidden_channels=64):
+    def __init__(self, in_channels, hidden_channels=64,out_channels=1,positive_output=True):
         super().__init__()
+        
+        self.positive_output = positive_output
 
         # Convoluzione grafo: feature iniziali -> feature nascoste
         self.conv1 = GCNConv(in_channels, hidden_channels)
@@ -26,7 +28,8 @@ class GNNModel(torch.nn.Module):
 
         # Output finale per regressione
         self.lin1 = Linear(hidden_channels,hidden_channels)
-        self.lin2 = Linear(hidden_channels, 1)
+        
+        self.lin2 = Linear(hidden_channels, out_channels)
 
     def forward(self, x, edge_index, batch):
         # Primo messaggio tra nodi
@@ -43,10 +46,14 @@ class GNNModel(torch.nn.Module):
         x = global_add_pool(x, batch)
 
         # Predizione finale
+        
+        
+        
         x = self.lin1(x)
         x = F.relu(x)
         x = self.lin2(x)
-        x = F.softplus(x)
+        if self.positive_output:
+            x = F.softplus(x)
 
         return x
     
@@ -128,7 +135,8 @@ class GNNTrainer:
             pred = self.model(batch.x, batch.edge_index, batch.batch)
 
             # target reale
-            target = batch.y.view(-1, 1).float()
+            #target = batch.y.view(-1, 1).float()
+            target = batch.y.view(pred.shape).float()
 
             # calcolo loss
             loss = self.criterion(pred, target)
@@ -167,7 +175,8 @@ class GNNTrainer:
                 
 
                 # target reale
-                target = batch.y.view(-1, 1).float()
+                #target = batch.y.view(-1, 1).float()
+                target = batch.y.view(pred.shape).float()
 
                 # loss
                 loss = self.criterion(pred, target)
@@ -214,13 +223,13 @@ class GNNTrainer:
 
                 pred = self.model(batch.x, batch.edge_index, batch.batch)
 
-                y_true.append(batch.y.view(-1, 1).cpu())
+                y_true.append(batch.y.view(pred.shape).cpu())
                 y_pred.append(pred.cpu())
 
-        y_true = torch.cat(y_true, dim=0).numpy().flatten()
-        y_pred = torch.cat(y_pred, dim=0).numpy().flatten()
+        y_true = torch.cat(y_true, dim=0).numpy()
+        y_pred = torch.cat(y_pred, dim=0).numpy()
         self.y_true = y_true
-        self.y_pred = y_pred 
+        self.y_pred = y_pred
 
         return y_true, y_pred
     

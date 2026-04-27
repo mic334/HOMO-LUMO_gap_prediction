@@ -48,6 +48,7 @@ class QM9Parser:
 
         for file in files:
             try:
+                #richiamo pars.fiele !!!!!!!!!!!!!
                 rec = self.parse_file(file)
                 records.append(rec)
             except Exception as e:

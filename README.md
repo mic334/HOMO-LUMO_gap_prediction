@@ -1,21 +1,27 @@
 # HOMO-LUMO Gap Prediction
 
-Machine learning project for predicting the HOMO-LUMO gap of molecules using graph neural networks (GNNs) built from SMILES representations.
+Machine learning project for predicting molecular electronic properties using Graph Neural Networks (GNNs) built from SMILES representations.
 
 ---
 
 ## Overview
 
-The HOMO-LUMO gap is an important molecular property in computational chemistry and is often related to:
+This project focuses on the prediction of key molecular electronic quantities from molecular graphs derived from SMILES strings.
+
+At the current stage, the main targets are:
+
+- **HOMO** energy
+- **LUMO** energy
+- **HOMO-LUMO gap**
+
+These quantities are important in computational chemistry and are often related to:
 
 - electronic structure
 - chemical reactivity
 - optical behavior
 - molecular stability
 
-This branch focuses on a graph-based pipeline where each molecule is converted from SMILES to a molecular graph and processed with a Graph Neural Network for regression.
-
-In addition to training on QM9-derived data, the project also includes scripts for running inference on external molecular datasets and comparing model predictions with xTB/DFT calculations.
+The project is based on a graph-learning pipeline in which each molecule is converted from SMILES into a molecular graph and processed with a Graph Neural Network for regression.
 
 ---
 
@@ -28,8 +34,10 @@ This branch (`graph_nn_benchmark`) contains the current experimental benchmark b
 - graph construction from molecules
 - GNN training with PyTorch Geometric
 - model evaluation and visualization
-- prediction on external compounds
-- comparison against xTB / DFT reference values
+- prediction of:
+  - HOMO
+  - LUMO
+  - HOMO-LUMO gap
 
 ---
 
@@ -45,22 +53,28 @@ The current workflow is:
 6. split the dataset into training and test sets
 7. train a GNN regression model
 8. save the trained model
-9. generate evaluation plots
-10. run prediction on external molecules
-11. compare predictions with xTB / DFT results
+9. generate evaluation plots for:
+   - HOMO
+   - LUMO
+   - HOMO-LUMO gap
 
 ---
 
 ## Model
 
-The current model is a graph neural network implemented with PyTorch Geometric.
+The current model is a Graph Neural Network implemented with PyTorch Geometric.
 
 Main characteristics:
 
 - node features extracted from RDKit atoms
 - graph convolution layers (`GCNConv`)
 - global pooling over node embeddings
-- final regression head for HOMO-LUMO gap prediction
+- regression head for molecular property prediction
+
+Depending on the experiment, the model can be used to predict:
+
+- only the **HOMO-LUMO gap**
+- both **HOMO** and **LUMO**
 
 The current node-level features include:
 
@@ -77,14 +91,16 @@ The current node-level features include:
 
 ## Dataset
 
-The training pipeline uses QM9 molecular files in `.xyz` format.
-
-**Dataset source:  https://ftp.ncbi.nlm.nih.gov/pubchem/Compound/CURRENT-Full/SDF/ name data = Compound_000000001_000500000.sdf.gz **
+The current training pipeline uses the **QM9** molecular dataset in `.xyz` format.
 
 Processed files are saved inside:
 
 - `data/processed/`
-- `data/PUB_processed/` for external prediction datasets
+
+An additional dataset of external molecules may also be used in future experiments for testing transferability and out-of-distribution behavior.
+
+Alchemy dataset download:
+- `https://alchemy.tencent.com`
 
 ---
 
@@ -106,7 +122,6 @@ HOMO-LUMO_gap_prediction/
 │   ├── estrai_HOMO_LUMO_xtb.sh
 │   └── sottometti.sh
 ├── src/
-│   ├── main.py
 │   ├── pred.py
 │   ├── result_modello.py
 │   ├── graph/
@@ -120,6 +135,3 @@ HOMO-LUMO_gap_prediction/
 │   └── xtb_DFT/
 ├── requirements.txt
 └── README.md
-
-# alchemy dataset download
-https://alchemy.tencent.com

@@ -4,7 +4,7 @@ import pandas as pd
 
 
 class ModelVisualizer:
-    def plot_predictions(self, y_true, y_pred, output_imm, title="Predicted vs Actual"):
+    def plot_predictions(self, y_true, y_pred, output_imm ,title="Predicted vs Actual"):
         plt.figure(figsize=(6, 6))
         plt.scatter(y_true, y_pred, alpha=0.6)
         plt.plot(
@@ -36,7 +36,7 @@ class ModelVisualizer:
         plt.xlabel("Importance")
         plt.ylabel("Feature")
         plt.title(title)
-        plt.savefig("../results/feature_importance.png", dpi=300, bbox_inches="tight")  
+        plt.savefig("../results_models/feature_importance.png", dpi=300, bbox_inches="tight")  
         plt.show()
         
     def plot_losses(self, train_losses, test_losses, title="Training and Test Loss"):
@@ -49,7 +49,7 @@ class ModelVisualizer:
         plt.ylabel("Loss")
         plt.title(title)
         plt.legend()
-        plt.savefig("../results/loss_curve.png", dpi=300, bbox_inches="tight")
+        plt.savefig("../results_models/loss_curve.png", dpi=300, bbox_inches="tight")
         plt.show()
 
 
@@ -61,5 +61,5 @@ class ModelVisualizer:
         plt.xlabel("Epoche")
         plt.ylabel("Tempo (s)")
         plt.title(title)
-        plt.savefig("../results/epoch_times.png", dpi=300, bbox_inches="tight")
+        plt.savefig("../results_models/epoch_times.png", dpi=300, bbox_inches="tight")
         plt.show()
