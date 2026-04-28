@@ -82,6 +82,30 @@ class GNNModel(torch.nn.Module):
 
         return preds
         
+        
+    @staticmethod
+    def predict_new_homo_lumo(model, datas, device="cpu", batch_size=32):
+        device = torch.device(device)
+        model = model.to(device)
+        model.eval()
+
+        pred_loader = DataLoader(datas, batch_size=batch_size, shuffle=False)
+
+        homo_preds = []
+        lumo_preds = []
+
+        with torch.no_grad():
+            for batch in pred_loader:
+                batch = batch.to(device)
+                out = model(batch.x, batch.edge_index, batch.batch)
+                # out shape attesa: [batch_size, 2]
+
+                out = out.cpu()
+
+                homo_preds.extend(out[:, 0].tolist())
+                lumo_preds.extend(out[:, 1].tolist())
+
+        return homo_preds, lumo_preds
     
 class GNNTrainer:
     def __init__(self, model, train_loader, test_loader, lr=0.001, device=None):
