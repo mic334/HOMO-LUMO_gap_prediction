@@ -163,5 +163,84 @@ def build_model():
     
 
 
+#--------- direct gap influenced by HOMO/LUMO auxiliary tasks --------------#
+    name_model_direct_gap_influenzed_HL = "direct_gap_influenzed_HL"
+
+    datas = []
+
+    for _, row in df.iterrows():
+        smile = row["smiles"]
+
+        # y[0] = gap
+        # y[1] = homo
+        # y[2] = lumo
+        target = row["gap"], row["homo"], row["lumo"]
+
+        data = graph.smiles_to_graph(smile, target)
+        datas.append(data)
+
+    train_data, test_data = graph.split_data_GNN(
+        datas,
+        test_size=0.2,
+        random_state=42
+    )
+
+    train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
+    test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
+
+    model_direct_gap_influenzed_HL = GNNModel(
+        in_channels=8,
+        hidden_channels=128,
+        out_channels=3,
+        positive_output=False
+    )
+
+    trainer = GNNTrainer(
+        model_direct_gap_influenzed_HL,
+        train_loader,
+        test_loader,
+        lr=0.001
+    )
+
+    print(trainer.device)
+    trainer.run(epochs=10)
+
+    trainer.save_model_gnn(
+        model_direct_gap_influenzed_HL,
+        name_model_direct_gap_influenzed_HL,
+        output_path_model
+    )
+
+    y_true, y_pred = trainer.get_predictions()
+
+    # prendiamo SOLO il gap
+    y_true_gap = y_true[:, 0]
+    y_pred_gap = y_pred[:, 0]
+
+    visualizer.plot_predictions(
+        y_true_gap,
+        y_pred_gap,
+        output_imm + "direct_gap_influenzed_HL.png",
+        title="Direct gap influenced by HOMO/LUMO"
+    )
+
+    visualizer.plot_errors(
+        y_true_gap,
+        y_pred_gap,
+        output_imm + "error_direct_gap_influenzed_HL.png",
+        bins=20,
+        title="Errors direct gap influenced by HOMO/LUMO"
+    )
+
+    trainer.evaluate_GNN()
+
+    print("y_true_gap mean/std:", y_true_gap.mean(), y_true_gap.std())
+    print("y_pred_gap mean/std:", y_pred_gap.mean(), y_pred_gap.std())
+    print("y_true_gap min/max:", y_true_gap.min(), y_true_gap.max())
+    print("y_pred_gap min/max:", y_pred_gap.min(), y_pred_gap.max())
+
+#--------- end direct gap influenced by HOMO/LUMO auxiliary tasks --------------#
+
+
 if __name__ == "__main__":
     build_model() 

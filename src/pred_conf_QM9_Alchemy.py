@@ -125,8 +125,8 @@ def __pred_conf_QM9_Alchemy():
     
     
     #diff
-    print(df_finale[["abs_err_direct", "abs_err_HL"]].mean())
-    print(df_finale["direct_better"].mean(), df_finale["HL_better"].mean())
+    print(df[["abs_err_direct", "abs_err_HL"]].mean())
+    print(df["direct_better"].mean(), df["HL_better"].mean())
     
     
 
