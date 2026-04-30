@@ -15,6 +15,17 @@ from plots.model_visualizer import ModelVisualizer
 
 def build_model():
     
+    #config ML variables 
+    SEED = 42
+    EPOCHS = 50
+    BATCH_SIZE = 32
+    LR = 0.001
+    TEST_SIZE = 0.2
+    HIDDEN_CHANNELS = 128
+    RANDOM_STATE = 42
+    
+    
+    
     #def path
     input_path = "../data/raw/qm9_dataset"
     output_filecsv = "../data/processed/qm9_gap_HL_dataset.csv"
@@ -55,18 +66,18 @@ def build_model():
     print(datas[1].edge_index.shape)
     print(datas[1].y)
     
-    train_data, test_data = graph.split_data_GNN(datas, test_size=0.2, random_state=42)
+    train_data, test_data = graph.split_data_GNN(datas, test_size=TEST_SIZE, random_state=RANDOM_STATE)
     
-    train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
+    train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=False)
     #model creation obj 
     
-    model_g = GNNModel(in_channels=8,hidden_channels=128)
+    model_g = GNNModel(in_channels=8,hidden_channels=HIDDEN_CHANNELS)
     
     #ogetto trainer in per poi usare run(funzione che fa il training )
-    trainer= GNNTrainer(model_g, train_loader, test_loader, lr=0.001)
+    trainer= GNNTrainer(model_g, train_loader, test_loader, lr=LR)
     print(trainer.device)
-    trainer.run(epochs=10)
+    trainer.run(epochs=EPOCHS)
     
     #save model gap 
     trainer.save_model_gnn(model_g,name_model_gap,output_path_model)
@@ -110,17 +121,17 @@ def build_model():
     print(datas[1].edge_index.shape)
     print(datas[1].y)
     
-    train_data, test_data = graph.split_data_GNN(datas, test_size=0.2, random_state=42)
+    train_data, test_data = graph.split_data_GNN(datas, test_size=TEST_SIZE, random_state=RANDOM_STATE)
     
-    train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
+    train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=False)
     #model creation obj 
-    model_HL= GNNModel(in_channels=8,hidden_channels=128,out_channels=2,positive_output=False)
+    model_HL= GNNModel(in_channels=8,hidden_channels=HIDDEN_CHANNELS,out_channels=2,positive_output=False)
     
     #ogetto trainer in per poi usare run(funzione che fa il training )
-    trainer = GNNTrainer(model_HL, train_loader, test_loader, lr=0.001)
+    trainer = GNNTrainer(model_HL, train_loader, test_loader, lr=LR)
     print(trainer.device)
-    trainer.run(epochs=10)    
+    trainer.run(epochs=EPOCHS)    
 
     #save model HOMO LUMO 
     trainer.save_model_gnn(model_HL,name_model_homo_lumo,output_path_model)
@@ -164,7 +175,7 @@ def build_model():
 
 
 #--------- direct gap influenced by HOMO/LUMO auxiliary tasks --------------#
-    name_model_direct_gap_influenzed_HL = "direct_gap_influenzed_HL"
+    name_model_direct_gap_influenced_HL = "direct_gap_influenced_HL"
 
     datas = []
 
@@ -181,33 +192,33 @@ def build_model():
 
     train_data, test_data = graph.split_data_GNN(
         datas,
-        test_size=0.2,
-        random_state=42
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE
     )
 
-    train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
+    train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=False)
 
-    model_direct_gap_influenzed_HL = GNNModel(
+    model_direct_gap_influenced_HL = GNNModel(
         in_channels=8,
-        hidden_channels=128,
+        hidden_channels=HIDDEN_CHANNELS,
         out_channels=3,
         positive_output=False
     )
 
     trainer = GNNTrainer(
-        model_direct_gap_influenzed_HL,
+        model_direct_gap_influenced_HL,
         train_loader,
         test_loader,
-        lr=0.001
+        lr=LR
     )
 
     print(trainer.device)
-    trainer.run(epochs=10)
+    trainer.run(epochs=EPOCHS)
 
     trainer.save_model_gnn(
-        model_direct_gap_influenzed_HL,
-        name_model_direct_gap_influenzed_HL,
+        model_direct_gap_influenced_HL,
+        name_model_direct_gap_influenced_HL,
         output_path_model
     )
 
@@ -220,14 +231,14 @@ def build_model():
     visualizer.plot_predictions(
         y_true_gap,
         y_pred_gap,
-        output_imm + "direct_gap_influenzed_HL.png",
+        output_imm + "direct_gap_influenced_HL.png",
         title="Direct gap influenced by HOMO/LUMO"
     )
 
     visualizer.plot_errors(
         y_true_gap,
         y_pred_gap,
-        output_imm + "error_direct_gap_influenzed_HL.png",
+        output_imm + "error_direct_gap_influenced_HL.png",
         bins=20,
         title="Errors direct gap influenced by HOMO/LUMO"
     )

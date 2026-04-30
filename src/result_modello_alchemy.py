@@ -84,7 +84,7 @@ model = GNNModel.model_load(model_path, device=device)
 
 #predico nuovi valori 
 
-preds = GNNModel.predict_new_gaps(model, datas, device=device, batch_size=32)
+preds = GNNModel.predict_new_gaps(model, datas, device=device, batch_size=BATCH_SIZE)
 
 #metto preds dentro uan nuova colonna del dataframe
 

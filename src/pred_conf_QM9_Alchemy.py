@@ -16,6 +16,11 @@ from my_math.basic_math import MathBase
 
 def __pred_conf_QM9_Alchemy():
     
+    DEVICE = "cpu"
+    BATCH_SIZE = 32
+    
+    
+    
     #def path
     data_path_alchemy= "../data/Alchemy-v20191129/final_version.csv"
     
@@ -86,49 +91,100 @@ def __pred_conf_QM9_Alchemy():
 
 
     #def model path e device 
-    device = "cpu"
+    device = DEVICE
     model_path_gap = "../models/modello_gap.pth" 
-    
+
+#---------------direct gap prediction---------------------#    
     #obj modello gap diretto 
     model_gap = GNNModel.model_load(model_path_gap, device=device)
     #rediction 
-    preds_direct_gap = GNNModel.predict_new_gaps(model_gap, datas, device=device, batch_size=32)
+    preds_direct_gap = GNNModel.predict_new_gaps(model_gap, datas, device=device, batch_size=BATCH_SIZE)
     #put in a datframe in a new colunm
 
     df_finale["gap_pred_direct"] = preds_direct_gap
 
     print(df_finale.head(10))
-
+    
+#---------------hl prediction---------------------#
     #def modello 
     model_path_HL = "../models/modello_homo_lumo.pth"
     model_HL = GNNModel.model_load(model_path_HL, device=device)
     
     homo_preds, lumo_preds = GNNModel.predict_new_homo_lumo(model_HL, datas, device=device)
     
-    #ad pred value for homo e lumo
+    
+        #ad pred value for homo e lumo
     df_finale["Homo_pred"]= homo_preds
     df_finale["Lumo_pred"]= lumo_preds
     
+#---------------gap direct hl influenced prediction---------------------#
+    #def modello 
+    model_path_direct_gap_influenced_HL = "../models/direct_gap_influenced_HL.pth"
+    model_gap_influenced_HL = GNNModel.model_load(model_path_direct_gap_influenced_HL, device=device)
+    
+    #two exit gap_inf   _ doublevector with homo Lumo (not saved)
+    gap_influenced, _ = GNNModel.predict_new_homo_lumo(model_gap_influenced_HL, datas, device=device) 
+
+    df_finale["gap_pred_direct_influenced_HL"] = gap_influenced
+
+#---------------build data_frame_for_analisys---------#
+
     df_finale["gap_pred_HL"] = df_finale["Lumo_pred"] - df_finale["Homo_pred"]
+    
+    
+    #print dataframe
+    print(df_finale.head(10))
+
+    # Differenza tra predizione direct e predizione HL
     df_finale["abs_diff_gap"] = (df_finale["gap_pred_HL"] - df_finale["gap_pred_direct"]).abs()
-    #print(df_finale.head(10))
+
+    # Errori firmati
     df_finale["err_direct"] = df_finale["gap"] - df_finale["gap_pred_direct"]
     df_finale["err_HL"] = df_finale["gap"] - df_finale["gap_pred_HL"]
+    df_finale["err_influenced"] = (df_finale["gap"] - df_finale["gap_pred_direct_influenced_HL"])
 
-    df_finale["abs_err_direct"] = df_finale["err_direct"].abs()   
+    # Errori assoluti
+    # Più piccolo = meglio
+    df_finale["abs_err_direct"] = df_finale["err_direct"].abs()
     df_finale["abs_err_HL"] = df_finale["err_HL"].abs()
+    df_finale["abs_err_influenced"] = df_finale["err_influenced"].abs()
 
-    df_finale["direct_better"] = df_finale["abs_err_direct"] < df_finale["abs_err_HL"]
-    df_finale["HL_better"] = df_finale["abs_err_HL"] < df_finale["abs_err_direct"] 
+    #--------------------fast analysis---------------------#
+    # Chi vince molecola per molecola
+    df_finale["direct_better"] = (
+        (df_finale["abs_err_direct"] < df_finale["abs_err_HL"]) &
+        (df_finale["abs_err_direct"] < df_finale["abs_err_influenced"])
+    )
+
+    df_finale["HL_better"] = (
+        (df_finale["abs_err_HL"] < df_finale["abs_err_direct"]) &
+        (df_finale["abs_err_HL"] < df_finale["abs_err_influenced"])
+    )
+
+    df_finale["influenced_better"] = (
+        (df_finale["abs_err_influenced"] < df_finale["abs_err_direct"]) &
+        (df_finale["abs_err_influenced"] < df_finale["abs_err_HL"])
+    )
+
     print(df_finale.head(10))
-    
-    
-    
-    #diff
-    print(df[["abs_err_direct", "abs_err_HL"]].mean())
-    print(df["direct_better"].mean(), df["HL_better"].mean())
-    
-    
+
+    # Errore medio:
+    # numero più piccolo = modello migliore
+    print(df_finale[[
+        "abs_err_direct",
+        "abs_err_HL",
+        "abs_err_influenced"
+    ]].mean())
+
+    # Percentuale di molecole vinte:
+    # numero più grande = modello che vince più spesso
+    print(
+        df_finale["direct_better"].mean(),
+        df_finale["HL_better"].mean(),
+        df_finale["influenced_better"].mean()
+    )
+
+
 
 if __name__ == "__main__":
     __pred_conf_QM9_Alchemy()

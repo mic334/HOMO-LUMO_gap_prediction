@@ -126,7 +126,9 @@ class GNNTrainer:
         self.y_pred = None
         
         # Se non viene specificato, usa GPU se disponibile, altrimenti CPU
-        self.device = device if device else torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #self.device = device if device else torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+        #mps lentissimo, ma se lo si vuole usare riga sopra
+        self.device = "cpu"
 
         # Sposta il modello sul device scelto
         self.model.to(self.device)
