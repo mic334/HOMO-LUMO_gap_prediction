@@ -24,6 +24,9 @@ def build_model():
     HIDDEN_CHANNELS = 128
     RANDOM_STATE = 42
     
+    #Variable to vs
+    TRESHOLD = 0.5
+    
     
     
     #def path
@@ -95,6 +98,7 @@ def build_model():
     y_true, y_pred = trainer.get_predictions()
 
 
+
     visualizer.plot_predictions(y_true, y_pred,output_imm + "gap.png", title="Predictions")
     visualizer.plot_errors(y_true, y_pred,output_imm + "error_gap.png", bins=20, title="errors")
 
@@ -106,6 +110,8 @@ def build_model():
     print("y_pred min/max:", y_pred.min(), y_pred.max())
     
     #---------end gap --------------#
+
+    #-----------pred  HL------------#
 
     #model for HL
     datas= []
@@ -145,14 +151,15 @@ def build_model():
     #prediction 
     y_true, y_pred = trainer.get_predictions()
 
+    
     #homo part vector
     y_true_homo = y_true[:, 0]
     y_pred_homo = y_pred[:, 0]
-
+    
     #lumo part vector
     y_true_lumo = y_true[:, 1]
     y_pred_lumo = y_pred[:, 1]
-
+    
     
     visualizer.plot_predictions(y_true_homo, y_pred_homo,output_imm + "H.png" , title="Predictions")
     visualizer.plot_errors(y_true_homo, y_pred_homo,output_imm + "H_errors.png", bins=20, title="errors")
@@ -227,7 +234,7 @@ def build_model():
     # prendiamo SOLO il gap
     y_true_gap = y_true[:, 0]
     y_pred_gap = y_pred[:, 0]
-
+    
     visualizer.plot_predictions(
         y_true_gap,
         y_pred_gap,
@@ -251,7 +258,6 @@ def build_model():
     print("y_pred_gap min/max:", y_pred_gap.min(), y_pred_gap.max())
 
 #--------- end direct gap influenced by HOMO/LUMO auxiliary tasks --------------#
-
 
 if __name__ == "__main__":
     build_model() 
