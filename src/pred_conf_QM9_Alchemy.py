@@ -19,8 +19,6 @@ def __pred_conf_QM9_Alchemy():
     DEVICE = "cpu"
     BATCH_SIZE = 32
     
-    
-    
     #def path
     data_path_alchemy= "../data/Alchemy-v20191129/final_version.csv"
     
@@ -166,24 +164,23 @@ def __pred_conf_QM9_Alchemy():
         (df_finale["abs_err_influenced"] < df_finale["abs_err_HL"])
     )
 
-    print(df_finale.head(10))
 
-    # Errore medio:
-    # numero più piccolo = modello migliore
-    print(df_finale[[
-        "abs_err_direct",
-        "abs_err_HL",
-        "abs_err_influenced"
-    ]].mean())
+    
+    
+    print("\n=== ERRORE MEDIO ===")
+    print("# più basso = meglio")
 
-    # Percentuale di molecole vinte:
-    # numero più grande = modello che vince più spesso
-    print(
-        df_finale["direct_better"].mean(),
-        df_finale["HL_better"].mean(),
-        df_finale["influenced_better"].mean()
-    )
+    print("direct     :", df_finale["abs_err_direct"].mean())
+    print("HL         :", df_finale["abs_err_HL"].mean())
+    print("influenced :", df_finale["abs_err_influenced"].mean())
 
+
+    print("\n=== PERCENTUALE VITTORIE ===")
+    print("# più alto = meglio")
+
+    print("direct     :", df_finale["direct_better"].mean() *100, "%" )
+    print("HL         :", df_finale["HL_better"].mean()*100,"%")
+    print("influenced :", df_finale["influenced_better"].mean() * 100, "%")
 
 
 if __name__ == "__main__":

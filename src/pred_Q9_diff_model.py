@@ -40,7 +40,7 @@ def pred_Q9_diff_model():
     
     model_path_gap = "../models/modello_gap.pth" 
 
-#------datas----
+#------datas------------#
     datas = []
     # smiles in Graph
     for _, row in df.iterrows():
@@ -94,7 +94,7 @@ def pred_Q9_diff_model():
     parser_QM9 = QM9Parser("../data/finale_elaborato")
     
     parser_QM9.save_csv(df,"../data/finale_elaborato/qm9_pred.csv")
-    
+
 
 if __name__ == "__main__":
     pred_Q9_diff_model()

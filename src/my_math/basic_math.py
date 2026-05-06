@@ -19,8 +19,8 @@ class MathBase:
         rmse = self.rmse(y_true, y_pred)
         r2 = self.r2(y_true, y_pred)
         print("inizio metriche")
-        print(f"mae : {mae}")
-        print(f"rmese : {rmse}")
-        print(f"R quadro : {r2}")
-        print("fien metriche")
+        print(f"mae : {mae}" ," più basso = meglio ")
+        print(f"rmese : {rmse}",  " più basso = meglio ")
+        print(f"R quadro : {r2}", " più alto = meglio ")
+        print("fine metriche")
         return mae, rmse, r2
