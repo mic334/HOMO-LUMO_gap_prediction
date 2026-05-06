@@ -2,8 +2,10 @@
 import pandas as pd
 import numpy as np
 
+
 #import ia lib 
 from torch_geometric.loader import DataLoader
+from sklearn.model_selection import train_test_split
 
 #importing my models
 from modello.modello_GNN import  GNNModel, GNNTrainer
@@ -53,6 +55,13 @@ def build_model():
     #obj graph_tools
     graph = Graph_tools()
     
+    
+    df_train, df_test = train_test_split(df,test_size=TEST_SIZE,random_state=RANDOM_STATE)
+    #save data 
+    parser.save_csv(df_train, "../data/processed/train/qm9_train.csv")
+    parser.save_csv(df_test, "../data/processed/test/qm9_test.csv")
+   
+   
     
     #model for gap 
     datas= []
