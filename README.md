@@ -1,106 +1,88 @@
-# HOMO-LUMO Gap Prediction
+# Direct vs Derived HOMO-LUMO Gap Prediction with GNNs
 
-Machine learning project for predicting molecular electronic properties using Graph Neural Networks (GNNs) built from SMILES representations.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-Scientific%20Computing-blue?logo=python" />
+  <img src="https://img.shields.io/badge/PyTorch-Geometric-red?logo=pytorch" />
+  <img src="https://img.shields.io/badge/RDKit-Cheminformatics-green" />
+  <img src="https://img.shields.io/badge/GNN-Molecular%20ML-orange" />
+</p>
 
----
+This branch explores different Graph Neural Network strategies for predicting molecular HOMO-LUMO gaps from SMILES representations.
 
-## Overview
-
-This project focuses on the prediction of key molecular electronic quantities from molecular graphs derived from SMILES strings.
-
-At the current stage, the main targets are:
-
-- **HOMO** energy
-- **LUMO** energy
-- **HOMO-LUMO gap**
-
-These quantities are important in computational chemistry and are often related to:
-
-- electronic structure
-- chemical reactivity
-- optical behavior
-- molecular stability
-
-The project is based on a graph-learning pipeline in which each molecule is converted from SMILES into a molecular graph and processed with a Graph Neural Network for regression.
+The project combines computational chemistry, molecular graph representations and deep learning using RDKit, PyTorch and PyTorch Geometric.
 
 ---
 
-## Current Branch
+## Project Goal
 
-This branch (`graph_nn_benchmark`) contains the current experimental benchmark based on:
+The goal is to compare two strategies for HOMO-LUMO gap prediction:
 
-- QM9 raw data parsing
+1. **Direct prediction**
+   A GNN is trained directly on the HOMO-LUMO gap.
+
+2. **Derived prediction**
+   A GNN predicts HOMO and LUMO separately, and the gap is computed as:
+
+```text
+HOMO-LUMO gap = LUMO - HOMO
+```
+
+By comparing the direct gap prediction with the derived gap prediction, the model disagreement can be used as a diagnostic signal.
+
+Large differences between the two predictions may indicate molecules where the model is less reliable or farther from the reference value.
+
+---
+
+## Workflow
+
+The pipeline includes:
+
+- molecular dataset parsing
 - SMILES extraction
-- graph construction from molecules
-- GNN training with PyTorch Geometric
-- model evaluation and visualization
-- prediction of:
-  - HOMO
-  - LUMO
-  - HOMO-LUMO gap
-
----
-
-## Current Pipeline
-
-The current workflow is:
-
-1. parse raw QM9 `.xyz` files
-2. extract molecular information and target values
-3. save the processed dataset as CSV
-4. convert each SMILES string into a graph
-5. build PyTorch Geometric `Data` objects
-6. split the dataset into training and test sets
-7. train a GNN regression model
-8. save the trained model
-9. generate evaluation plots for:
-   - HOMO
-   - LUMO
-   - HOMO-LUMO gap
+- molecular graph construction with RDKit
+- PyTorch Geometric dataset creation
+- GNN training for regression
+- direct HOMO-LUMO gap prediction
+- HOMO and LUMO prediction
+- derived gap calculation
+- comparison between prediction strategies
+- error analysis and visualization
 
 ---
 
 ## Model
 
-The current model is a Graph Neural Network implemented with PyTorch Geometric.
+The model is a Graph Neural Network implemented with PyTorch Geometric.
 
-Main characteristics:
+Main components:
 
-- node features extracted from RDKit atoms
-- graph convolution layers (`GCNConv`)
-- global pooling over node embeddings
+- graph convolution layers
+- atom-level molecular features
+- global pooling
 - regression head for molecular property prediction
 
-Depending on the experiment, the model can be used to predict:
-
-- only the **HOMO-LUMO gap**
-- both **HOMO** and **LUMO**
-
-The current node-level features include:
-
-- atomic number
-- atom degree
-- formal charge
-- aromaticity
-- total number of hydrogens
-- implicit valence
-- explicit valence
-- ring membership
+Atom features include atomic number, degree, formal charge, aromaticity, hydrogens, valence information and ring membership.
 
 ---
 
-## Dataset
+## Results and Plots
 
-The current training pipeline uses the **QM9** molecular dataset in `.xyz` format.
+The branch includes plots for gap, HOMO and LUMO predictions, together with their error distributions.
 
-Processed files are saved inside:
+<p align="center">
+  <img src="results_models/gap.png" width="45%" />
+  <img src="results_models/error_gap.png" width="45%" />
+</p>
 
-- `data/processed/`
+<p align="center">
+  <img src="results_models/H.png" width="45%" />
+  <img src="results_models/L.png" width="45%" />
+</p>
 
-An additional dataset of external molecules may also be used in future experiments for testing transferability and out-of-distribution behavior.
-
-Alchemy dataset download:
-- `https://alchemy.tencent.com`
+<p align="center">
+  <img src="results_models/H_errors.png" width="45%" />
+  <img src="results_models/L_errors.png" width="45%" />
+</p>
 
 ---
 
@@ -109,29 +91,92 @@ Alchemy dataset download:
 ```text
 HOMO-LUMO_gap_prediction/
 ├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── PUB_processed/
-├── figures/
 ├── models/
-│   └── models.pth
-├── notebooks/
-├── results/
-├── script/
-│   ├── HOMO_LUMO.sh
-│   ├── estrai_HOMO_LUMO_xtb.sh
-│   └── sottometti.sh
+├── results_models/
 ├── src/
+│   ├── build_model.py
 │   ├── pred.py
-│   ├── result_modello.py
+│   ├── pred_conf_QM9_Alchemy.py
 │   ├── graph/
-│   │   └── graf.py
 │   ├── modello/
-│   │   └── modello_GNN.py
 │   ├── parser/
-│   │   └── data_loader.py
-│   ├── plots/
-│   │   └── model_visualizer.py
-│   └── xtb_DFT/
+│   └── plots/
 ├── requirements.txt
+├── LICENSE
 └── README.md
+```
+
+---
+
+## Technologies
+
+- Python
+- PyTorch
+- PyTorch Geometric
+- RDKit
+- NumPy
+- Pandas
+- scikit-learn
+- Matplotlib
+- Graph Neural Networks
+- Molecular machine learning
+
+---
+
+## How to Run
+
+Clone the repository and switch to this branch:
+
+```bash
+git clone https://github.com/mic334/HOMO-LUMO_gap_prediction.git
+cd HOMO-LUMO_gap_prediction
+git checkout direct_vs_derived_gap
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Train the models:
+
+```bash
+cd src
+python build_model.py
+```
+
+Run prediction and comparison:
+
+```bash
+python pred_conf_QM9_Alchemy.py
+```
+
+---
+
+## Current Status
+
+This branch is an experimental benchmark for comparing direct and derived HOMO-LUMO gap prediction strategies.
+
+Current features:
+
+- GNN model for direct gap prediction
+- GNN model for HOMO and LUMO prediction
+- derived gap calculation
+- prediction disagreement analysis
+- error visualization
+
+Future improvements:
+
+- cleaner configuration files
+- saved metrics in CSV/JSON format
+- uncertainty analysis
+- additional GNN architectures
+- Docker/Singularity support
+- HPC-ready scripts
+
+---
+
+## License
+
+This project is released under the MIT License.
