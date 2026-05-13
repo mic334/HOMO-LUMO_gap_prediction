@@ -1,68 +1,59 @@
-# HOMO-LUMO Gap Prediction
+# Molecular GNN Benchmark for HOMO-LUMO Gap Prediction
 
-Machine learning project for predicting the HOMO-LUMO gap of molecules using graph neural networks (GNNs) built from SMILES representations.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-Scientific%20Computing-blue?logo=python" />
+  <img src="https://img.shields.io/badge/PyTorch-Geometric-red?logo=pytorch" />
+  <img src="https://img.shields.io/badge/RDKit-Cheminformatics-green" />
+  <img src="https://img.shields.io/badge/xTB%20%2F%20DFT-Benchmarking-purple" />
+</p>
 
----
+This repository contains a graph-based deep learning workflow for predicting molecular HOMO-LUMO gaps from molecular structures.
 
-## Overview
+The project combines **computational chemistry**, **cheminformatics**, **scientific programming** and **Graph Neural Networks**. Molecules are converted from SMILES into graph structures using RDKit and processed with a GNN model implemented in PyTorch Geometric.
 
-The HOMO-LUMO gap is an important molecular property in computational chemistry and is often related to:
-
-- electronic structure
-- chemical reactivity
-- optical behavior
-- molecular stability
-
-This branch focuses on a graph-based pipeline where each molecule is converted from SMILES to a molecular graph and processed with a Graph Neural Network for regression.
-
-In addition to training on QM9-derived data, the project also includes scripts for running inference on external molecular datasets and comparing model predictions with xTB/DFT calculations.
+The workflow also includes external molecule prediction and comparison against xTB/DFT reference calculations.
 
 ---
 
-## Current Branch
+## Project Goal
 
-This branch (`graph_nn_benchmark`) contains the current experimental benchmark based on:
+The goal of this project is to develop a reproducible molecular machine learning pipeline for HOMO-LUMO gap prediction.
 
-- QM9 raw data parsing
+The HOMO-LUMO gap is an important electronic property related to molecular stability, reactivity and optical behavior.
+
+This project explores how Graph Neural Networks can learn molecular electronic properties directly from molecular graph representations.
+
+---
+
+## Workflow
+
+The current pipeline includes:
+
+- QM9 molecular data parsing
 - SMILES extraction
-- graph construction from molecules
-- GNN training with PyTorch Geometric
+- molecular graph construction with RDKit
+- PyTorch Geometric graph dataset creation
+- GNN regression model training
 - model evaluation and visualization
-- prediction on external compounds
-- comparison against xTB / DFT reference values
-
----
-
-## Current Pipeline
-
-The current workflow is:
-
-1. parse raw QM9 `.xyz` files
-2. extract molecular information and target values
-3. save the processed dataset as CSV
-4. convert each SMILES string into a graph
-5. build PyTorch Geometric `Data` objects
-6. split the dataset into training and test sets
-7. train a GNN regression model
-8. save the trained model
-9. generate evaluation plots
-10. run prediction on external molecules
-11. compare predictions with xTB / DFT results
+- prediction on external molecular datasets
+- comparison with xTB and DFT reference calculations
 
 ---
 
 ## Model
 
-The current model is a graph neural network implemented with PyTorch Geometric.
+The model is a Graph Neural Network implemented with PyTorch Geometric.
 
-Main characteristics:
+Main components:
 
-- node features extracted from RDKit atoms
-- graph convolution layers (`GCNConv`)
-- global pooling over node embeddings
-- final regression head for HOMO-LUMO gap prediction
+- graph convolution layers
+- atom-level molecular features
+- molecular graph representation from SMILES
+- global graph pooling
+- fully connected regression head
+- HOMO-LUMO gap prediction as a regression task
 
-The current node-level features include:
+Atom-level features include:
 
 - atomic number
 - atom degree
@@ -77,14 +68,81 @@ The current node-level features include:
 
 ## Dataset
 
-The training pipeline uses QM9 molecular files in `.xyz` format.
+The model was trained on a QM9-derived molecular dataset.
 
-**Dataset source:  https://ftp.ncbi.nlm.nih.gov/pubchem/Compound/CURRENT-Full/SDF/ name data = Compound_000000001_000500000.sdf.gz **
+| Property | Value |
+|---|---:|
+| Molecules | 130,680 |
+| Train size | 104,544 |
+| Test size | 26,136 |
+| Target property | HOMO-LUMO gap |
 
-Processed files are saved inside:
+---
 
-- `data/processed/`
-- `data/PUB_processed/` for external prediction datasets
+## Results
+
+Current benchmark results:
+
+| Metric | Value |
+|---|---:|
+| MAE | 0.0091 |
+| RMSE | 0.0120 |
+| R² | 0.9365 |
+
+These results show that the model can learn a meaningful relationship between molecular graph structure and the HOMO-LUMO gap.
+
+---
+
+## Evaluation Plots
+
+<p align="center">
+  <img src="results/loss_curve.png" width="45%" />
+  <img src="results/predicted_vs_actual.png" width="45%" />
+</p>
+
+<p align="center">
+  <img src="results/error_distribution.png" width="45%" />
+  <img src="results/epoch_times.png" width="45%" />
+</p>
+
+---
+
+## External Molecule Prediction
+
+The repository includes scripts for applying the trained GNN model to external molecular datasets.
+
+The external prediction workflow includes:
+
+1. reading molecular structures from SDF files
+2. extracting canonical SMILES
+3. converting molecules into graph objects
+4. loading the trained GNN model
+5. predicting HOMO-LUMO gaps
+6. ranking molecules by predicted gap
+
+This part of the project represents a first step toward molecular screening workflows using graph-based deep learning.
+
+---
+
+## xTB and DFT Benchmarking
+
+The project also includes a benchmarking workflow against quantum chemistry calculations.
+
+The workflow includes:
+
+- generating molecular geometries
+- running xTB calculations
+- extracting HOMO and LUMO values
+- computing reference HOMO-LUMO gaps
+- generating Gaussian input files for DFT calculations
+- comparing GNN predictions with xTB/DFT reference values
+
+<p align="center">
+  <img src="figures/pred_vs_calc_xtb.png" width="45%" />
+  <img src="figures/pred_vs_calc_DFT.png" width="45%" />
+</p>
+
+This provides a connection between data-driven molecular prediction and computational chemistry validation.
 
 ---
 
@@ -93,33 +151,120 @@ Processed files are saved inside:
 ```text
 HOMO-LUMO_gap_prediction/
 ├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── PUB_processed/
 ├── figures/
 ├── models/
-│   └── models.pth
 ├── notebooks/
 ├── results/
 ├── script/
-│   ├── HOMO_LUMO.sh
-│   ├── estrai_HOMO_LUMO_xtb.sh
-│   └── sottometti.sh
 ├── src/
 │   ├── main.py
 │   ├── pred.py
 │   ├── result_modello.py
 │   ├── graph/
-│   │   └── graf.py
 │   ├── modello/
-│   │   └── modello_GNN.py
 │   ├── parser/
-│   │   └── data_loader.py
 │   ├── plots/
-│   │   └── model_visualizer.py
 │   └── xtb_DFT/
 ├── requirements.txt
+├── LICENSE
 └── README.md
+```
 
-# alchemy dataset download
-https://alchemy.tencent.com
+---
+
+## Technologies
+
+- Python
+- PyTorch
+- PyTorch Geometric
+- RDKit
+- NumPy
+- Pandas
+- Matplotlib
+- scikit-learn
+- xTB
+- Gaussian/DFT workflow
+- Linux/Bash
+
+---
+
+## How to Run
+
+Clone the repository:
+
+```bash
+git clone https://github.com/mic334/HOMO-LUMO_gap_prediction.git
+cd HOMO-LUMO_gap_prediction
+git checkout graph_nn_benchmark
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the main pipeline:
+
+```bash
+cd src
+python main.py
+```
+
+Run prediction on external molecules:
+
+```bash
+python pred.py
+```
+
+Run post-processing and xTB/DFT comparison:
+
+```bash
+python result_modello.py
+```
+
+---
+
+## Current Status
+
+This project is an experimental benchmark for molecular property prediction using Graph Neural Networks.
+
+Current features:
+
+- molecular graph construction from SMILES
+- GNN model training
+- HOMO-LUMO gap prediction
+- model evaluation
+- external molecule prediction
+- xTB/DFT comparison workflow
+- visualization of model performance
+
+Future improvements:
+
+- additional GNN architectures
+- cleaner configuration files
+- Docker/Singularity support
+- HPC-ready training scripts
+- model explainability for molecular graphs
+
+---
+
+## Why This Project Matters
+
+This project demonstrates how computational chemistry workflows can be integrated with modern AI methods.
+
+It shows practical experience with:
+
+- scientific programming
+- molecular machine learning
+- graph neural networks
+- deep learning model training
+- chemical data processing
+- benchmarking against quantum chemistry calculations
+- reproducible scientific workflows
+
+---
+
+## License
+
+This project is released under the MIT License.
