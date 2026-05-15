@@ -11,9 +11,12 @@ from parser.data_loader import QM9Parser
 
 def bench_qm9():
 
+   # output_filecsv = [
+   # ("../data/finale_elaborato/qm9_pred_test.csv", "../data/finale_elaborato/qm9_bench_test.csv"),
+   # ("../data/finale_elaborato/qm9_pred_train.csv", "../data/finale_elaborato/qm9_bench_train.csv")
+   # ]
     output_filecsv = [
-    ("../data/finale_elaborato/qm9_pred_test.csv", "../data/finale_elaborato/qm9_bench_test.csv"),
-    ("../data/finale_elaborato/qm9_pred_train.csv", "../data/finale_elaborato/qm9_bench_train.csv")
+    ("../data/finale_elaborato/qm9_pred_test.csv", "../data/finale_elaborato/qm9_bench_test.csv")
     ]
     
     for output_filecsv, save_name in output_filecsv:
@@ -71,8 +74,11 @@ def bench_qm9():
         plt.title("Trend disaccordo vs errore reale")
         plt.legend()
         plt.grid(True)
+        plt.savefig("../figures/disaccordo_reale.png")
         plt.show()
-        
+        plt.close()
+       
+       
        #scatter plot di base 
         plt.figure(figsize=(8,6))
 
@@ -87,13 +93,10 @@ def bench_qm9():
         plt.ylabel("Errore rispetto al valore reale")
         plt.title("Scatter plot: disaccordo vs errore reale")
         plt.grid(True)
+        plt.savefig("../figures/scatter_disaccordo_reale.png")
         plt.show()
+        plt.close()
        
-       
-       
-        
-        
-        
         
         
         #print("\n=== TOP 10 MOST INFLUENCED BY HL ===")
